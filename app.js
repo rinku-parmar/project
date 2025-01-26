@@ -61,16 +61,14 @@ app.get("/listings/:id",async(req,res)=>{
 //  await newListing.save();
 //    res.redirect("/listings")
 // }) 
-app.post("/listings",async (req,res,next)=>{
-    try{
+app.post("/listings", wrapAsync(async (req,res,next)=>{
+    
         const newListing= new Listing(req.body.listing);
          await newListing.save();
           res.redirect("/listings")
-    }catch(err){
-        next(err);
-    }
-       
+
     }) 
+)
     
 
 //edit
