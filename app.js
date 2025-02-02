@@ -8,7 +8,7 @@ const ejsMate=require("ejs-mate")
 const wrapAsync=require("./utils/wrapAsync.js");
 const ExpressError=require("./utils/ExpressError.js");
 const {listingSchema,reviewSchema}=require("./schema.js");
-const Reviews =require("./models/reviews.js");
+const Review =require("./models/reviews.js");
 
 
 
@@ -75,7 +75,7 @@ app.get("/listings/new",  (req, res) => {
 // --------2-show route-  indival information
 app.get("/listings/:id",wrapAsync(async(req,res)=>{
     let {id}=req.params;
-    const listing=await Listing.findById(id);
+    const listing=await Listing.findById(id).populate("reviews");
     res.render("listings/show.ejs",{listing})
     // console.log(id);
 }))
@@ -158,11 +158,11 @@ app.delete("/listings/:id",wrapAsync(async(req,res)=>{
    res.redirect("/listings");
 }))
 
-/*reviews*/
+/*reviews----------------------*/
 //post route 
 app.post("/listings/:id/reviews",vaildateReview,wrapAsync(async(req,res)=>{
     let listing= await Listing.findById(req.params.id);
-    let newReview =new Reviews(req.body.review);
+    let newReview =new Review(req.body.review);
 
     listing.reviews.push(newReview);
 
