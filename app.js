@@ -173,6 +173,17 @@ app.post("/listings/:id/reviews",vaildateReview,wrapAsync(async(req,res)=>{
 res.redirect(`/listings/${listing._id}`)
 
 }));
+// Delete -review route 
+app.delete("/listings/:id/reviews/:reviewId",
+    wrapAsync(async(req,res)=>{
+    let {id,reviewId}=req.params;
+    console.log(`Review ID: '${reviewId}'`);
+
+    await Listing.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
+    await Review.findByIdAndDelete(reviewId);
+
+    res.redirect(`/listings/${id}`)
+}))
 
 app.all("*" ,(req,res,next)=>{
     next(new ExpressError(404,"page not found!"))
