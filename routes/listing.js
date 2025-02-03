@@ -4,7 +4,7 @@ const router=express.Router();
 const Listing =require("../models/listing");
 const wrapAsync=require("../utils/wrapAsync.js");
 const ExpressError=require("../utils/ExpressError.js");
-const {listingSchema,reviewSchema}=require("../schema.js");
+const {listingSchema}=require("../schema.js");
 
 
 
