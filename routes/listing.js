@@ -106,7 +106,10 @@ router.put("/:id",
         throw new ExpressError(400,"send valid data for listing")
      }
     let {id}=req.params;
-   const result= await Listing.findByIdAndUpdate(id,{...req.body.listing})
+   const result= await Listing.findByIdAndUpdate(id,{...req.body.listing});
+
+   req.flash("success","Listing Updated!");
+
   res.redirect(`/listings/${id}`) //show route
 //  console.log(result);
 }))
@@ -116,6 +119,7 @@ router.delete("/:id",wrapAsync(async(req,res)=>{
    let {id}=req.params;
    let deletedListing= await Listing.findByIdAndDelete(id);
    console.log(deletedListing);
+   req.flash("success","Listing Deleted !")
    res.redirect("/listings");
 }))
 
