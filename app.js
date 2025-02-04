@@ -6,6 +6,7 @@ const methodOverride = require('method-override');
 const ejsMate=require("ejs-mate");
 const ExpressError=require("./utils/ExpressError.js");
 const session = require("express-session");
+const flash =require("connect-flash");
 
 const seesionOptions={
     secret:"mysupersecretcode",
@@ -18,7 +19,18 @@ const seesionOptions={
     }
 }
 
+app.get("/",(req,res)=>{
+    res.send("hi i am root");
+})
+
+
 app.use(session(seesionOptions));
+app.use(flash());
+
+app.use((req,res,next)=>{
+    res.locals.success=req.flash("success");
+    next();
+})
 
 const listings =require("./routes/listing.js");
 const reviews =require("./routes/review.js");
@@ -45,9 +57,6 @@ async function main() {
  app.use(express.static(path.join(__dirname,"/public")))
 
 
-app.get("/",(req,res)=>{
-    res.send("hi i am root");
-})
 
 
 

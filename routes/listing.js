@@ -81,14 +81,12 @@ router.get("/:id",wrapAsync(async(req,res)=>{
 // }) 
 // )
 router.post("/",vaildatelisting, wrapAsync(async (req,res,next)=>{  //using validation for schema(middleware)
-       let result= listingSchema.validate(req.body)
-       console.log(result);
-       if(result.error){
-        throw new ExpressError(400,result.error)
-       }
+ 
         const newListing= new Listing(req.body.listing);
         await newListing.save();
-          res.redirect("/listings")
+        //flash
+        req.flash("success","New Listing Created!");
+          res.redirect("/listings");
     
     }) 
     )
