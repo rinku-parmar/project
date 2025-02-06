@@ -9,7 +9,7 @@ const session = require("express-session");
 const flash =require("connect-flash");
 const passport=require("passport");
 const LocalStrategy=require("passport-local");
-const User=require("userSchema");
+const User=require("./models/user.js");
 
 const seesionOptions={
     secret:"mysupersecretcode",
@@ -45,6 +45,17 @@ app.use((req,res,next)=>{
 
     // console.log(res.locals.success);
     next();
+})
+
+// demo user
+app.get("/demouser",async(req,res)=>{
+    let fakeUser= new User({
+        email:"student@gmail.com",
+        username:"delta-student"
+    });
+
+  let registeredUser= await User.register(fakeUser,"helloworld");
+  res.send(registeredUser);
 })
 
 const listings =require("./routes/listing.js");
