@@ -58,8 +58,10 @@ app.get("/demouser",async(req,res)=>{
   res.send(registeredUser);
 })
 
-const listings =require("./routes/listing.js");
-const reviews =require("./routes/review.js");
+const listingsRouter =require("./routes/listing.js");
+const reviewsRouter =require("./routes/review.js");
+const userRouter =require("./routes/user.js");
+
 
 
 
@@ -87,8 +89,12 @@ async function main() {
 
 
 
-app.use("/listings",listings)
-app.use("/listings/:id/reviews",reviews)
+app.use("/listings",listingsRouter);
+app.use("/listings/:id/reviews",reviewsRouter);
+app.use("/",userRouter);
+
+
+
 
 
 
