@@ -48,7 +48,7 @@ app.use((req,res,next)=>{
 })
 
 // demo user
-app.get("/demouser",async(req,res)=>{
+/*app.get("/demouser",async(req,res)=>{
     let fakeUser= new User({
         email:"student@gmail.com",
         username:"delta-student"
@@ -56,7 +56,7 @@ app.get("/demouser",async(req,res)=>{
 
   let registeredUser= await User.register(fakeUser,"helloworld");
   res.send(registeredUser);
-})
+})*/
 
 const listingsRouter =require("./routes/listing.js");
 const reviewsRouter =require("./routes/review.js");
