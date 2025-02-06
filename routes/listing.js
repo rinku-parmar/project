@@ -38,6 +38,11 @@ router.get("/new",  (req, res) => {
 router.get("/:id",wrapAsync(async(req,res)=>{
     let {id}=req.params;
     const listing=await Listing.findById(id).populate("reviews");
+    //flash
+    if(!listing){
+        req.flash("error","Listing you requested for does not exist!");
+        res.redirect("/listings")
+    }
     res.render("listings/show.ejs",{listing})
     // console.log(id);
 }))
@@ -95,6 +100,10 @@ router.post("/",vaildatelisting, wrapAsync(async (req,res,next)=>{  //using vali
 router.get("/:id/edit",wrapAsync(async(req,res)=>{
     let {id}=req.params;
     const listing=await Listing.findById(id);
+    if(!listing){
+        req.flash("error","Listing you requested for does not exist!");
+        res.redirect("/listings")
+    }
        res.render("listings/edit.ejs",{listing})
 }))
 
