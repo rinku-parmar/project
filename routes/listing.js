@@ -6,6 +6,7 @@ const wrapAsync=require("../utils/wrapAsync.js");
 const ExpressError=require("../utils/ExpressError.js");
 const {listingSchema}=require("../schema.js");
 
+const{isLoggedIn}=require("../middleware.js");
 
 
 // validation for schema(middleware)
@@ -30,7 +31,14 @@ router.get("/",wrapAsync(async(req,res)=>{
 }))
 
 // -----------3---new Route
-router.get("/new",  (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
+    /*.without login user cann't create listings*/
+    // console.log(req.user);
+    // if(!req.isAuthenticated()){  
+    //     req.flash("error","you must be logged in to create listing!");
+    // //    return res.redirect("/listings");
+    //       return res.redirect("/login");
+    // }
     res.render("listings/new.ejs");
 });
 
@@ -85,7 +93,7 @@ router.get("/:id",wrapAsync(async(req,res)=>{
 
 // }) 
 // )
-router.post("/",vaildatelisting, wrapAsync(async (req,res,next)=>{  //using validation for schema(middleware)
+router.post("/",isLoggedIn,vaildatelisting, wrapAsync(async (req,res,next)=>{  //using validation for schema(middleware)
  
         const newListing= new Listing(req.body.listing);
         await newListing.save();
@@ -97,7 +105,7 @@ router.post("/",vaildatelisting, wrapAsync(async (req,res,next)=>{  //using vali
     )
 
 //edit
-router.get("/:id/edit",wrapAsync(async(req,res)=>{
+router.get("/:id/edit",isLoggedIn,wrapAsync(async(req,res)=>{
     let {id}=req.params;
     const listing=await Listing.findById(id);
     if(!listing){
@@ -109,6 +117,7 @@ router.get("/:id/edit",wrapAsync(async(req,res)=>{
 
 //update route
 router.put("/:id",
+    isLoggedIn,
     vaildatelisting,
     wrapAsync(async(req,res)=>{
     if(!req.body.listing){
@@ -124,7 +133,7 @@ router.put("/:id",
 }))
 
 //DELETE route
-router.delete("/:id",wrapAsync(async(req,res)=>{
+router.delete("/:id",isLoggedIn,wrapAsync(async(req,res)=>{
    let {id}=req.params;
    let deletedListing= await Listing.findByIdAndDelete(id);
    console.log(deletedListing);
