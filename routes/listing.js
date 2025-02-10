@@ -6,7 +6,7 @@ const wrapAsync=require("../utils/wrapAsync.js");
 const ExpressError=require("../utils/ExpressError.js");
 const {listingSchema}=require("../schema.js");
 
-const{isLoggedIn}=require("../middleware.js");
+const{isLoggedIn,isOwner}=require("../middleware.js");
 
 
 // validation for schema(middleware)
@@ -107,7 +107,7 @@ router.post("/",isLoggedIn,vaildatelisting, wrapAsync(async (req,res,next)=>{  /
     )
 
 //edit
-router.get("/:id/edit",isLoggedIn,wrapAsync(async(req,res)=>{
+router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(async(req,res)=>{
     let {id}=req.params;
     const listing=await Listing.findById(id);
     if(!listing){
@@ -119,12 +119,13 @@ router.get("/:id/edit",isLoggedIn,wrapAsync(async(req,res)=>{
 
 //update route
 router.put("/:id",
-    isLoggedIn,
+    isLoggedIn,// Ensure user is logged in
+    isOwner,// Ensure user is the owner
     vaildatelisting,
     wrapAsync(async(req,res)=>{
-    if(!req.body.listing){
-        throw new ExpressError(400,"send valid data for listing")
-     }
+    // if(!req.body.listing){
+    //     throw new ExpressError(400,"send valid data for listing")
+    //  }
     let {id}=req.params;
    const result= await Listing.findByIdAndUpdate(id,{...req.body.listing});
 
@@ -135,7 +136,7 @@ router.put("/:id",
 }))
 
 //DELETE route
-router.delete("/:id",isLoggedIn,wrapAsync(async(req,res)=>{
+router.delete("/:id",isLoggedIn,isOwner,wrapAsync(async(req,res)=>{
    let {id}=req.params;
    let deletedListing= await Listing.findByIdAndDelete(id);
    console.log(deletedListing);
