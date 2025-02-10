@@ -4,18 +4,22 @@ const wrapAsync=require("../utils/wrapAsync.js");
 const ExpressError=require("../utils/ExpressError.js");
 
 const Review =require("../models/reviews.js");
-const Listing =require("../models/listing");
-const {vaildateReview}=require("../middleware.js");
+const Listing =require("../models/listing.js");
+const {vaildateReview, isLoggedIn}=require("../middleware.js");
 
 
 
 
 /*reviews----------------------*/
 //post route 
-router.post("/",vaildateReview,wrapAsync(async(req,res)=>{
-    console.log(req.params.id);
+router.post("/",
+  isLoggedIn,
+  vaildateReview,wrapAsync(async(req,res)=>{
+    // console.log(req.params.id);
     let listing= await Listing.findById(req.params.id);
     let newReview =new Review(req.body.review);
+    newReview.author=req.user._id;//save author
+   // console.log(`review ${newReview}`);
 
     listing.reviews.push(newReview);
 
