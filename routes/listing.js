@@ -3,24 +3,11 @@ const router=express.Router();
 
 const Listing =require("../models/listing");
 const wrapAsync=require("../utils/wrapAsync.js");
-const ExpressError=require("../utils/ExpressError.js");
-const {listingSchema}=require("../schema.js");
-
-const{isLoggedIn,isOwner}=require("../middleware.js");
 
 
-// validation for schema(middleware)
-const vaildatelisting=(req,res,next)=>{
-    let {error}= listingSchema.validate(req.body)
-    if(error){
-        // throw new ExpressError(400,error)
-        //extact detail
-        let errMsg=error.details.map((el)=>el.message).join(",");
-        throw new ExpressError(400,errMsg)
-    }else{
-        next()
-    }
-}
+const{isLoggedIn,isOwner,vaildatelisting}=require("../middleware.js");
+
+
 
 
 //-------1-index route :show all
@@ -51,7 +38,7 @@ router.get("/:id",wrapAsync(async(req,res)=>{
         req.flash("error","Listing you requested for does not exist!");
         res.redirect("/listings")
     }
-    console.log(listing);
+    // console.log(listing);
     res.render("listings/show.ejs",{listing})
     // console.log(id);
 }))
