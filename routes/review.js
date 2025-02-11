@@ -5,7 +5,7 @@ const ExpressError=require("../utils/ExpressError.js");
 
 const Review =require("../models/reviews.js");
 const Listing =require("../models/listing.js");
-const {vaildateReview, isLoggedIn}=require("../middleware.js");
+const {vaildateReview, isLoggedIn,isReviewAuthor}=require("../middleware.js");
 
 
 
@@ -34,6 +34,8 @@ res.redirect(`/listings/${listing._id}`)
 }));
 // Delete -review route 
 router.delete("/:reviewId",
+  isLoggedIn,     // Ensure the user is logged in
+  isReviewAuthor,  // Ensure the user is the review author
     wrapAsync(async(req,res)=>{
     let {id,reviewId}=req.params;
     console.log(`Review ID: '${reviewId}'`);
