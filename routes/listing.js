@@ -17,24 +17,7 @@ router.get("/",wrapAsync(listingController.index));
 router.get("/new", isLoggedIn,listingController.renderNewForm);
 
 // --------2-show route-  indival information
-router.get("/:id",wrapAsync(async(req,res)=>{
-    let {id}=req.params;
-    const listing=await Listing.findById(id)
-    .populate({
-        path:"reviews",
-        populate:{
-            path:"author",
-        },
-    }).populate("owner");
-    //flash
-    if(!listing){
-        req.flash("error","Listing you requested for does not exist!");
-        res.redirect("/listings")
-    }
-    // console.log(listing);
-    res.render("listings/show.ejs",{listing})
-    // console.log(id);
-}))
+router.get("/:id",wrapAsync(listingController.showListing));
 
 //--4.create route
 
