@@ -8,14 +8,10 @@ const wrapAsync=require("../utils/wrapAsync.js");
 const{isLoggedIn,isOwner,vaildatelisting}=require("../middleware.js");
 
 
-
+const listingController =require("../controllers/listings.js");
 
 //-------1-index route :show all
-router.get("/",wrapAsync(async(req,res)=>{
-    const allListings= await Listing.find({})
-    //.then(res=>{ console.log(res) })
-    res.render("listings/index.ejs",{allListings})
-}))
+router.get("/",wrapAsync(listingController.index));
 
 // -----------3---new Route
 router.get("/new", isLoggedIn, (req, res) => {
