@@ -14,16 +14,7 @@ const listingController =require("../controllers/listings.js");
 router.get("/",wrapAsync(listingController.index));
 
 // -----------3---new Route
-router.get("/new", isLoggedIn, (req, res) => {
-    /*.without login user cann't create listings*/
-    // console.log(req.user);
-    // if(!req.isAuthenticated()){  
-    //     req.flash("error","you must be logged in to create listing!");
-    // //    return res.redirect("/listings");
-    //       return res.redirect("/login");
-    // }
-    res.render("listings/new.ejs");
-});
+router.get("/new", isLoggedIn,listingController.renderNewForm);
 
 // --------2-show route-  indival information
 router.get("/:id",wrapAsync(async(req,res)=>{
