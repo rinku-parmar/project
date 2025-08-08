@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { schema, create } = require("./listing");
+//const { schema, create } = require("./listing");
 const { string } = require("joi");
 const Schema = mongoose.Schema;
 
