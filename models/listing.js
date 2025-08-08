@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-// const review = require("./reviews");
+const Review = require("./reviews");
 const { ref } = require("joi");
 const Schema = mongoose.Schema;
 
@@ -37,7 +37,7 @@ const listingSchema = new Schema({
 // Middleware to run after a listing is deleted
 listingSchema.post("findOneAndDelete",async(listing)=>{
     if(listing){
-        await review.deleteMany({_id: {$in: listing.reviews}})
+        await Review.deleteMany({_id: {$in: listing.reviews}})
     }
 
 })
