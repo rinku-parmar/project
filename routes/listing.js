@@ -57,54 +57,20 @@ router.get("/:id",wrapAsync(listingController.showListing));
 
 // }) 
 // )
-router.post("/",isLoggedIn,vaildatelisting, wrapAsync(async (req,res,next)=>{  //using validation for schema(middleware)
- 
-        const newListing= new Listing(req.body.listing);
-        newListing.owner=req.user._id; 
-        await newListing.save();
-        //flash
-        req.flash("success","New Listing Created!");
-          res.redirect("/listings");
-    
-    }) 
+router.post("/",isLoggedIn,vaildatelisting, wrapAsync(listingController.createListing) 
     )
 
 //edit
-router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(async(req,res)=>{
-    let {id}=req.params;
-    const listing=await Listing.findById(id);
-    if(!listing){
-        req.flash("error","Listing you requested for does not exist!");
-        res.redirect("/listings")
-    }
-       res.render("listings/edit.ejs",{listing})
-}))
+router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingController.renderEditForm))
 
 //update route
 router.put("/:id",
     isLoggedIn,// Ensure user is logged in
     isOwner,// Ensure user is the owner
     vaildatelisting,
-    wrapAsync(async(req,res)=>{
-    // if(!req.body.listing){
-    //     throw new ExpressError(400,"send valid data for listing")
-    //  }
-    let {id}=req.params;
-   const result= await Listing.findByIdAndUpdate(id,{...req.body.listing});
-
-   req.flash("success","Listing Updated!");
-
-  res.redirect(`/listings/${id}`) //show route
-//  console.log(result);
-}))
+    wrapAsync(listingController.updateListing))
 
 //DELETE route
-router.delete("/:id",isLoggedIn,isOwner,wrapAsync(async(req,res)=>{
-   let {id}=req.params;
-   let deletedListing= await Listing.findByIdAndDelete(id);
-   console.log(deletedListing);
-   req.flash("success","Listing Deleted !")
-   res.redirect("/listings");
-}))
+router.delete("/:id",isLoggedIn,isOwner,wrapAsync(listingController.destroyListing))
 
 module.exports=router;
