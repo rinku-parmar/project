@@ -10,14 +10,35 @@ const{isLoggedIn,isOwner,vaildatelisting}=require("../middleware.js");
 
 const listingController =require("../controllers/listings.js");
 
-//-------1-index route :show all
-router.get("/",wrapAsync(listingController.index));
+
+router.route("/")
+.get(wrapAsync(listingController.index))//INDEX route
+.post(isLoggedIn,vaildatelisting, wrapAsync(listingController.createListing)) //CREATE route
 
 // -----------3---new Route
 router.get("/new", isLoggedIn,listingController.renderNewForm);
 
+router.route("/:id")
+.get(wrapAsync(listingController.showListing)) //SHOW route
+.put(
+    isLoggedIn,// Ensure user is logged in
+    isOwner,// Ensure user is the owner
+    vaildatelisting,
+    wrapAsync(listingController.updateListing)) //UPADTE  route
+.delete(isLoggedIn,isOwner,wrapAsync(listingController.destroyListing)) //DELETE route
+
+//edit
+router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingController.renderEditForm))
+
+
+//-------1-index route :show all
+// router.get("/",wrapAsync(listingController.index));
+
+// // -----------3---new Route
+// router.get("/new", isLoggedIn,listingController.renderNewForm);
+
 // --------2-show route-  indival information
-router.get("/:id",wrapAsync(listingController.showListing));
+//router.get("/:id",wrapAsync(listingController.showListing));
 
 //--4.create route
 
@@ -57,20 +78,20 @@ router.get("/:id",wrapAsync(listingController.showListing));
 
 // }) 
 // )
-router.post("/",isLoggedIn,vaildatelisting, wrapAsync(listingController.createListing) 
-    )
+// router.post("/",isLoggedIn,vaildatelisting, wrapAsync(listingController.createListing) 
+//     )
 
-//edit
-router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingController.renderEditForm))
+// //edit
+// router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingController.renderEditForm))
 
 //update route
-router.put("/:id",
-    isLoggedIn,// Ensure user is logged in
-    isOwner,// Ensure user is the owner
-    vaildatelisting,
-    wrapAsync(listingController.updateListing))
+// router.put("/:id",
+//     isLoggedIn,// Ensure user is logged in
+//     isOwner,// Ensure user is the owner
+//     vaildatelisting,
+//     wrapAsync(listingController.updateListing))
 
 //DELETE route
-router.delete("/:id",isLoggedIn,isOwner,wrapAsync(listingController.destroyListing))
+// router.delete("/:id",isLoggedIn,isOwner,wrapAsync(listingController.destroyListing))
 
 module.exports=router;
