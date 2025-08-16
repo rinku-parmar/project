@@ -10,11 +10,16 @@ const{isLoggedIn,isOwner,vaildatelisting}=require("../middleware.js");
 
 const listingController =require("../controllers/listings.js");
 
+const multer  = require('multer') // for image link passing multi-part/form-data
+const upload = multer({ dest: 'uploads/' })
 
 router.route("/")
 .get(wrapAsync(listingController.index))//INDEX route
-.post(isLoggedIn,vaildatelisting, wrapAsync(listingController.createListing)) //CREATE route
-
+// .post(isLoggedIn,vaildatelisting, wrapAsync(listingController.createListing)) //CREATE route
+ .post(upload.single('listing[image]'), (req,res)=>{
+    // res.send(req.body);
+    res.send(req.file);
+ })
 // -----------3---new Route
 router.get("/new", isLoggedIn,listingController.renderNewForm);
 
