@@ -11,7 +11,8 @@ const{isLoggedIn,isOwner,vaildatelisting}=require("../middleware.js");
 const listingController =require("../controllers/listings.js");
 
 const multer  = require('multer') // for image link passing multi-part/form-data
-const upload = multer({ dest: 'uploads/' })
+const { storage } = require('../cloudConfig.js'); // Import cloudinary config
+const upload = multer({storage})//const upload = multer({ dest: 'uploads/' })
 
 router.route("/")
 .get(wrapAsync(listingController.index))//INDEX route
