@@ -42,9 +42,13 @@ module.exports.showListing=async(req,res)=>{
 
 // create route
 module.exports.createListing=async (req,res,next)=>{  //using validation for schema(middleware)
- 
+           let url=req.file.path;
+           let filename=req.file.filename;
+           console.log(url,'...',filename);
+
         const newListing= new Listing(req.body.listing);
         newListing.owner=req.user._id; 
+        newListing.image={url,filename};
         await newListing.save();
         //flash
         req.flash("success","New Listing Created!");
