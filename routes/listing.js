@@ -35,6 +35,7 @@ router.route("/:id")
 .put(
     isLoggedIn,// Ensure user is logged in
     isOwner,// Ensure user is the owner
+    upload.single('listing[image]'),
     vaildatelisting,
     wrapAsync(listingController.updateListing)) //UPADTE  route
 .delete(isLoggedIn,isOwner,wrapAsync(listingController.destroyListing)) //DELETE route
