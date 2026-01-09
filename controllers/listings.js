@@ -64,7 +64,9 @@ module.exports.createListing=async (req,res,next)=>{  //using validation for sch
             req.flash("error","Listing you requested for does not exist!");
             res.redirect("/listings")
         }
-           res.render("listings/edit.ejs",{listing})
+           let originalImageUrl=listing.image.url;
+          originalImageUrl= originalImageUrl.replace("/upload","/upload/,w_400");//resize image using cloudinary
+           res.render("listings/edit.ejs",{listing,originalImageUrl});
     }
     //update route
     module.exports.updateListing=async(req,res)=>{
