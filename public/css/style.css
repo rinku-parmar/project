@@ -65,7 +65,7 @@ body {
 .listing-card {
     border: none !important;
     margin-bottom: 2rem;
-   
+
 
 }
 
@@ -125,5 +125,17 @@ body {
 
 /*map */
 #map {
-    height: 400px; 
-    width: 80vh; }
+    height: 400px;
+    width: 80vh;
+}
+
+.custom-marker {
+    background-image: url('/images/marker.png');
+    background-size: cover;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+
+
+}
