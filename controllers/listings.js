@@ -6,9 +6,26 @@ const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 //store  all callback
 //index
 module.exports.index = async (req, res) => {
-    const allListings = await Listing.find({});
-    //.then(res=>{ console.log(res) })
-    res.render("listings/index.ejs", { allListings })
+    // const allListings = await Listing.find({});
+    // //.then(res=>{ console.log(res) })
+     const { category } = req.query;
+
+  let allListings;
+
+  //  DEFAULT: show all listings
+  if (!category) {
+    allListings = await Listing.find({});
+  } 
+  //  FILTERED: show selected category only
+  else {
+    allListings = await Listing.find({ category });
+  }
+
+  res.render("listings/index.ejs", {
+    allListings,
+    selectedCategory: category
+  });
+    // res.render("listings/index.ejs", { allListings })
 }
 
 // new route 

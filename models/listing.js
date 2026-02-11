@@ -44,7 +44,21 @@ const listingSchema = new Schema({
       type: [Number],
       required: true
     }
-   }
+   },
+    category: {
+    type: String,
+    enum: [
+      "trending",
+      "rooms",
+      "iconic_cities",
+      "mountains",
+      "castles",
+      "pools",
+      "camping",
+      "farms",
+      "arctic"
+    ]
+  },
 });
 
 // Middleware to run after a listing is deleted
