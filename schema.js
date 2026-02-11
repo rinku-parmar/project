@@ -18,7 +18,9 @@ module.exports.listingSchema =Joi.object({
         "pools",
         "camping",
         "farms",
-        "arctic"
+        "arctic",
+        "dome",
+        "boats"
       )
       .required()
     }).required()
