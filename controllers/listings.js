@@ -8,23 +8,42 @@ const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 module.exports.index = async (req, res) => {
     // const allListings = await Listing.find({});
     // //.then(res=>{ console.log(res) })
-     const { category } = req.query;
+     const { category, search  } = req.query;
+     console.log("Category from URL:", category);
+    console.log("Search from URL:", search);
 
-  let allListings;
+    let filter = {};  // Start with an empty filter object
+    // Add category filter if provided
+    if (category) {
+        filter.category = category;
+    }
+    // Add search filter if provided (search in title, location, or description)
+    if (search) {
+        filter.$or = [
+            { title: { $regex: search, $options: 'i' } },       // Case-insensitive match
+            { location: { $regex: search, $options: 'i' } },
+            { country: { $regex: search, $options: "i" } }
+        ];
+    }
 
-  //  DEFAULT: show all listings
-  if (!category) {
-    allListings = await Listing.find({});
-  } 
-  //  FILTERED: show selected category only
-  else {
-    allListings = await Listing.find({ category });
-  }
+    const allListings = await Listing.find(filter);  // Apply the combined filter-Shows all
 
-  res.render("listings/index.ejs", {
-    allListings,
-    selectedCategory: category
-  });
+    res.render("listings/index.ejs", { allListings,  selectedCategory: category, search });  // Pass search to the template
+//   let allListings;
+
+//   //  DEFAULT: show all listings
+//   if (!category) {
+//     allListings = await Listing.find({});
+//   } 
+//   //  FILTERED: show selected category only
+//   else {
+//     allListings = await Listing.find({ category });
+//   }
+
+//   res.render("listings/index.ejs", {
+//     allListings,
+//     selectedCategory: category
+//   });
     // res.render("listings/index.ejs", { allListings })
 }
 

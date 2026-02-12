@@ -52,6 +52,8 @@ app.use((req,res,next)=>{
     // console.log(res.locals.success);
   
     res.locals.currUser=req.user;
+    res.locals.search = req.query.search || "";
+    res.locals.selectedCategory = req.query.category || "";
 
     next();
 })
