@@ -9,8 +9,8 @@ module.exports.index = async (req, res) => {
     // const allListings = await Listing.find({});
     // //.then(res=>{ console.log(res) })
      const { category, search  } = req.query;
-     console.log("Category from URL:", category);
-    console.log("Search from URL:", search);
+    //  console.log("Category from URL:", category);
+    // console.log("Search from URL:", search);
 
     let filter = {};  // Start with an empty filter object
     // Add category filter if provided
