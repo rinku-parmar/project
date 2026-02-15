@@ -1,47 +1,47 @@
-const express=require("express");
-const router=express.Router();
+const express = require("express");
+const router = express.Router();
 
-const Listing =require("../models/listing");
-const wrapAsync=require("../utils/wrapAsync.js");
-
-
-const{isLoggedIn,isOwner,vaildatelisting}=require("../middleware.js");
+const Listing = require("../models/listing");
+const wrapAsync = require("../utils/wrapAsync.js");
 
 
-const listingController =require("../controllers/listings.js");
+const { isLoggedIn, isOwner, vaildatelisting } = require("../middleware.js");
 
-const multer  = require('multer') // for image link passing multi-part/form-data
+
+const listingController = require("../controllers/listings.js");
+
+const multer = require('multer') // for image link passing multi-part/form-data
 const { storage } = require('../cloudConfig.js'); // Import cloudinary config
-const upload = multer({storage})//const upload = multer({ dest: 'uploads/' })
+const upload = multer({ storage })//const upload = multer({ dest: 'uploads/' })
 
 router.route("/")
-.get(wrapAsync(listingController.index))//INDEX route
- .post(isLoggedIn,
-   
-    upload.single('listing[image]'),
-     vaildatelisting,
-    wrapAsync(listingController.createListing)////CREATE route
-)
+    .get(wrapAsync(listingController.index))//INDEX route
+    .post(isLoggedIn,
+
+        upload.single('listing[image]'),
+        vaildatelisting,
+        wrapAsync(listingController.createListing)////CREATE route
+    )
 //  .post(upload.single('listing[image]'), (req,res)=>{
 //     // res.send(req.body);
 //     res.send(req.file);
 //  })
 
 // -----------3---new Route
-router.get("/new", isLoggedIn,listingController.renderNewForm);
+router.get("/new", isLoggedIn, listingController.renderNewForm);
 
 router.route("/:id")
-.get(wrapAsync(listingController.showListing)) //SHOW route
-.put(
-    isLoggedIn,// Ensure user is logged in
-    isOwner,// Ensure user is the owner
-    upload.single('listing[image]'),
-    vaildatelisting,
-    wrapAsync(listingController.updateListing)) //UPADTE  route
-.delete(isLoggedIn,isOwner,wrapAsync(listingController.destroyListing)) //DELETE route
+    .get(wrapAsync(listingController.showListing)) //SHOW route
+    .put(
+        isLoggedIn,// Ensure user is logged in
+        isOwner,// Ensure user is the owner
+        upload.single('listing[image]'),
+        vaildatelisting,
+        wrapAsync(listingController.updateListing)) //UPADTE  route
+    .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing)) //DELETE route
 
 //edit
-router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingController.renderEditForm))
+router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm))
 
 
 //-------1-index route :show all
@@ -78,7 +78,7 @@ router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingController.renderEdit
 
 //     }) 
 // )
-    
+
 // app.post("/listings", wrapAsync(async (req,res,next)=>{ //joi
 //    let result= listingSchema.validate(req.body)
 //    console.log(result);
@@ -107,4 +107,4 @@ router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingController.renderEdit
 //DELETE route
 // router.delete("/:id",isLoggedIn,isOwner,wrapAsync(listingController.destroyListing))
 
-module.exports=router;
+module.exports = router;

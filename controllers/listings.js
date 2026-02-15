@@ -8,7 +8,7 @@ const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 module.exports.index = async (req, res) => {
     // const allListings = await Listing.find({});
     // //.then(res=>{ console.log(res) })
-     const { category, search  } = req.query;
+    const { category, search } = req.query;
     //  console.log("Category from URL:", category);
     // console.log("Search from URL:", search);
 
@@ -28,22 +28,22 @@ module.exports.index = async (req, res) => {
 
     const allListings = await Listing.find(filter);  // Apply the combined filter-Shows all
 
-    res.render("listings/index.ejs", { allListings,  selectedCategory: category, search });  // Pass search to the template
-//   let allListings;
+    res.render("listings/index.ejs", { allListings, selectedCategory: category, search });  // Pass search to the template
+    //   let allListings;
 
-//   //  DEFAULT: show all listings
-//   if (!category) {
-//     allListings = await Listing.find({});
-//   } 
-//   //  FILTERED: show selected category only
-//   else {
-//     allListings = await Listing.find({ category });
-//   }
+    //   //  DEFAULT: show all listings
+    //   if (!category) {
+    //     allListings = await Listing.find({});
+    //   } 
+    //   //  FILTERED: show selected category only
+    //   else {
+    //     allListings = await Listing.find({ category });
+    //   }
 
-//   res.render("listings/index.ejs", {
-//     allListings,
-//     selectedCategory: category
-//   });
+    //   res.render("listings/index.ejs", {
+    //     allListings,
+    //     selectedCategory: category
+    //   });
     // res.render("listings/index.ejs", { allListings })
 }
 
@@ -81,11 +81,11 @@ module.exports.showListing = async (req, res) => {
 
 // create route
 module.exports.createListing = async (req, res, next) => {  //using validation for schema(middleware)
-   let response = await geocodingClient.forwardGeocode({
+    let response = await geocodingClient.forwardGeocode({
         query: req.body.listing.location,
         limit: 1,
     })
-    .send();
+        .send();
 
     let url = req.file.path;
     let filename = req.file.filename;
@@ -95,8 +95,8 @@ module.exports.createListing = async (req, res, next) => {  //using validation f
     newListing.owner = req.user._id;
     newListing.image = { url, filename };
     newListing.geometry = response.body.features[0].geometry;
-    
-    let savedListing=await newListing.save();
+
+    let savedListing = await newListing.save();
     console.log(savedListing);
     //flash
     req.flash("success", "New Listing Created!");
